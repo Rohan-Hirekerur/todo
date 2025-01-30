@@ -1,0 +1,46 @@
+<!-- Title for dialog -->
+<h2 mat-dialog-title>Task Details</h2>
+
+<!-- Main content -->
+<mat-dialog-content>
+
+  <!-- Form -->
+  <form>
+
+    <!-- Title -->
+    <mat-form-field class="w-100 p-1 pt-3" appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput [formControl]="title" required placeholder="Name for the task">
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field class="w-100 p-1" appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea cdkTextareaAutosize matInput [formControl]="description" required
+        placeholder="Add some details related to the task" style="min-height: 8em;">
+    </textArea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<!-- 
+  Actions :
+  1. Save
+  2. Descard
+  3. Delete
+ -->
+<mat-dialog-actions>
+  <div class="d-flex w-100" style="justify-content: space-between; flex-wrap: no-wrap;">
+    <div>
+      @if(id !== undefined) {
+      <button mat-button (click)="closeDialog('DELETE')">Delete</button>
+      }
+    </div>
+    <div>
+      <button mat-button (click)="closeDialog('DISCARD')">Discard</button>
+      <button mat-button cdkFocusInitial (click)="closeDialog('SAVE')"
+        [disabled]="!title.valid || !description.valid">Save</button>
+    </div>
+  </div>
+</mat-dialog-actions>

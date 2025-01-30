@@ -1,49 +1,101 @@
-<div class="container">
-  <mat-card appearance="outlined" class="card-layout">
-    <mat-card-header>
-      <mat-card-title> TODO list project</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      @if (selectedIndex >= 0) {
-        <div class="error-container">
-          <p>You are in Editing Mode... You can not do any actions on the existing list</p>
-        </div>
-      }
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label>Describe what to do ?</mat-label>
-          <input matInput placeholder="Describe what to do ?" [(ngModel)]="description">
-          @if (selectedIndex >=0) {
-          <mat-icon matSuffix (click)="updateItem()">save_as</mat-icon>
-          } @else {
-            <mat-icon matSuffix (click)="save()">save</mat-icon>
-          }
+<div class="container-fluid h-100 main-container">
 
-        </mat-form-field>
-      </div>
+  <!-- Header of the app -->
+  <div class="row">
+    <div class="col-12 p-0">
+      <mat-toolbar>
+        <button mat-icon-button class="menu-icon" aria-label="menu icon">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span>To Do List</span>
+      </mat-toolbar>
+    </div>
+  </div>
 
-      @for (item of todoList(); track item.id; let i = $index) {
-        <div class="listing">
-          <div>
-            <mat-checkbox (click)="checkmarkChanged(i)" [disabled]="selectedIndex>=0">
-              <span [ngClass]="item.done ? 'crossover' : ''">{{item.description}}</span>
-            </mat-checkbox>
+  <!-- Main section -->
+  <div class="row py-4 px-4 main-section">
+    <div class="col-12 col-md-8 col-xl-6 py-3 px-4 inner-container h-100" style="position: relative;">
+
+        <!-- Search bar -->
+        <div class="row">
+          <div class="col-12 search-bar">
+            <mat-form-field appearance="outline" class="w-100" style="padding: 0">
+              <mat-icon matPrefix style="cursor: pointer;" type="submit">search</mat-icon>
+              <input matInput cdkTextareaAutosize placeholder="Search" hint="Search " type="text"
+                [formControl]="searchString" style="max-height: 200px;">
+            </mat-form-field>
           </div>
-          @if (selectedIndex < 0) {
-            <div>
-              @if (!item.done) {
-                <mat-icon matSuffix (click)="editItem(i, item)">edit</mat-icon>&nbsp;
-              }
-              <mat-icon matSuffix (click)="deleteConfirmation(i)">delete</mat-icon>
-            </div>
-          }
-
         </div>
-      } @empty {
-        <div class="error-container">
-        <p>No Records added</p>
+  
+        <!-- 
+          Chips to apply pre-built filters on the list. Includes 3 modes
+          1. Pending tasks
+          2. All tasks
+          3. Complete tasks
+         -->
+        <div class="row mt-2">
+          <div class="col-12">
+            <mat-chip-listbox aria-label="Filter by completion status">
+  
+              <!-- Pending : -->
+              <mat-chip-option [selected]="toDoListFilter() === 0"
+                (selectionChange)="toDoListFilter.set(0)">Pending</mat-chip-option>
+  
+              <!-- All -->
+              <mat-chip-option [selected]="toDoListFilter() === 1"
+                (selectionChange)="toDoListFilter.set(1)">All</mat-chip-option>
+  
+              <!-- Complete -->
+              <mat-chip-option [selected]="toDoListFilter() === 2"
+                (selectionChange)="toDoListFilter.set(2)">Complete</mat-chip-option>
+            </mat-chip-listbox>
+          </div>
+        </div>
+  
+        <!-- Actual to-do list -->
+        <div class="row mt-2 todo-list">
+          <div class="col-12 h-100">
+  
+            <!-- Use cdk drag drop for sorting -->
+            <mat-list cdkDropList class="task-list h-100" (cdkDropListDropped)="drop($event)">
+  
+              @for (item of todoList; track item) {
+              <mat-list-item
+                [ngClass]="['task-item', 'cursor-pointer', 
+                (toDoListFilter() === 1 || 
+                (toDoListFilter() === 0 && !item.complete ) || 
+                (toDoListFilter() === 2 && item.complete)) &&
+                (!searchString.value || (item.title.toLowerCase().includes(searchString.value.toLowerCase()) || item.description.toLowerCase().includes(searchString.value.toLowerCase()))) ? '' : 'hide-item']"
+                cdkDrag [cdkDragStartDelay]="300" cdkScrollable>
+  
+                <!-- Checkbox for changing completeness of task -->
+                <mat-checkbox matListItemIcon [checked]="item.complete"
+                  (change)="updateStatus(item.id, $event.checked)"></mat-checkbox>
+  
+                <!-- Wrapper for content. Click on this will initiate edit mode -->
+                <div class="content" (click)="openDialog(item)">
+  
+                  <!-- Placeholder that will be shown when an item is being dragged -->
+                  <div class="task-custom-placeholder" *cdkDragPlaceholder></div>
+  
+                  <!-- Title -->
+                  <span style="margin-left: 0.8em" matListItemTitle>{{item.title}}</span>
+  
+                  <!-- Description -->
+                  <span style="margin-left: 1em" matListItemLine>{{item.description}}</span>
+                </div>
+              </mat-list-item>
+              }
+  
+            </mat-list>
+          </div>
+        </div>
+  
+        <!-- FAB for creating new task -->
+        <button mat-fab class="create-button" (click)="openDialog()">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
-      }
-    </mat-card-content>
-  </mat-card>
+
+  </div>
 </div>

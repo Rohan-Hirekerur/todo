@@ -1,37 +1,120 @@
-.container {
-    display: flex;
-    justify-content: center;
-    padding-top: 30px;
+.cursor-pointer {
+  cursor: pointer !important;
 }
 
-.card-layout {
-  width: 500px;
+::ng-deep .mat-toolbar {
+  background-color: var(--mat-sys-inverse-primary) !important;
 }
 
-mat-form-field {
-  width: 100%;
+.main-container {
+  background-color: var(--mat-sys-surface-container);
+  overflow: hidden;
 }
 
-mat-card-header {
-  display: flex;
-    justify-content: center;
-    padding-bottom: 20px;
+.inner-container {
+  background-color: var(--mat-sys-background);
+  border-radius: 2em;
+  overflow: hidden;
 }
 
-.listing {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.error-container {
-  display: flex;
+.main-section {
+  height: calc(100% - 4rem); 
   justify-content: center;
-  p {
-    color: red;
+  overflow: hidden;
+}
+
+.todo-list {
+  height: calc(100% - 115px);
+  overflow: hidden;
+}
+
+.search-bar {
+  border: 1px solid gray;
+  border-radius: 2em;
+  height: fit-content;
+
+  ::ng-deep .mdc-notched-outline.mdc-notched-outline--upgraded {
+    border: 1px solid gray;
+    border-radius: 0.7em;
+  }
+  ::ng-deep .mdc-notched-outline__trailing {
+    border: none !important;
+  }
+  ::ng-deep .mdc-notched-outline__notch {
+    border: none !important;
+  }
+  ::ng-deep .mdc-notched-outline__leading {
+    border: none !important;
+  }
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
   }
 }
 
-.crossover {
-  text-decoration: line-through;
+.task-list {
+  width: 100%;
+  min-height: 60px;
+  display: block;
+  overflow-y: scroll;
+}
+
+::ng-deep mat-list-item .mat-mdc-list-item-line {
+  word-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  line-height: 1.5em !important;
+}
+
+::ng-deep mat-list-item {
+  height: auto !important;
+  .mdc-list-item__content {
+    white-space: pre-wrap !important;
+  }
+}
+
+.task-item {
+  padding: 0 0 1em 0;
+  border-bottom: solid 1px #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.task-list.cdk-drop-list-dragging .task-item:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.task-custom-placeholder {
+  background: var(--mat-sys-surface-container);
+  border: dotted 3px gainsboro;
+  min-height: 4em;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.hide-item {
+  visibility: hidden;
+  height: 0 !important;
+  padding: 0;
+}
+
+.create-button {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+}
+
+.content {
+  margin-top: -1.5em;
 }
